@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Bot : MonoBehaviour
 {
-    public float energy = 100f;
+    public int energy = 100;
     public bool isKind;
     public float speed = 5f;
 
@@ -15,12 +15,14 @@ public class Bot : MonoBehaviour
     public float randomMovementAngle = 0;
 
 
-    
 
     void Start()
     {
         meshRenderer = GetComponent<MeshRenderer>();
         rb = GetComponent<Rigidbody>();
+
+        energy = 100;
+        angleChangeInterval = Random.Range(1f, 3f);
 
         DetermineSide();
 
@@ -45,7 +47,9 @@ public class Bot : MonoBehaviour
 
     public void Reproduce()
     {
-        Instantiate(gameObject, new Vector3(transform.position.x, transform.position.y + 100f, transform.position.z), Quaternion.identity);
+        energy -= 50;
+
+        Instantiate(gameObject, new Vector3(transform.position.x, transform.position.y + 10f, transform.position.z), Quaternion.identity);
     }
 
     void DetermineSide()
@@ -73,7 +77,6 @@ public class Bot : MonoBehaviour
 
     void SetRandomAngle()
     {
-        Debug.Log("Random Angle set");
         randomMovementAngle = Random.value * 360;
     }
 
@@ -89,19 +92,19 @@ public class Bot : MonoBehaviour
     {
         if (isKind && otherBot.isKind) // Both kind
         {
-            energy += 20f;
+            energy += 20; // Default 20
         }
         else if (!isKind && !otherBot.isKind) // Both NOT kind
         {
-            energy -= 20f;
+            energy -= 20; // Default -20
         }
         else if (isKind && !otherBot.isKind) // This kind, other NOT kind
         {
-            energy -= 50f;
+            energy -= 40; // Default -40
         }
         else if (!isKind && otherBot.isKind) // This NOT kind, other kind
         {
-            energy += 10f;
+            energy += 20; // Default 10
         }
     }
 
